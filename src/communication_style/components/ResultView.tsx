@@ -236,30 +236,35 @@ export default function ResultView({ result, onRestart }: ResultViewProps) {
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="flex-1">
-          <label className="text-sm text-gray-600">送信先メールアドレス</label>
+      <div className="bg-white rounded-2xl shadow-2xl p-8">
+        <h3 className="text-xl font-bold text-gray-800 mb-2">📧 この結果を自分に送る</h3>
+        <p className="text-gray-600 mb-3">後でゆっくり読み返せます</p>
+        <div className="flex flex-col gap-3 items-center">
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="example@example.com"
-            className="w-full mt-2 px-4 py-3 rounded-lg border border-gray-200"
+            placeholder="example@mail.com"
+            className="w-full max-w-md px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-300"
           />
           {emailError && <p className="text-sm text-red-600 mt-2">{emailError}</p>}
           <button
             onClick={handleEmailSend}
-            className="w-full mt-4 bg-white text-indigo-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg border-2 border-indigo-600"
+            className={`w-full max-w-md bg-indigo-600 text-white font-medium py-2.5 px-6 rounded-lg hover:bg-indigo-700 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg ${!email || emailError ? 'opacity-60 cursor-not-allowed' : ''}`}
+            disabled={!email || !!emailError}
           >
-            📧 指定アドレスにメールで送る（メールアプリを開く）
+            📧 メールアプリを開く
           </button>
         </div>
-        <button
-          onClick={onRestart}
-          className="flex-1 bg-white/20 text-white px-6 py-4 rounded-xl font-semibold hover:bg-white/30 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm"
-        >
-          🔄 もう一度診断する
-        </button>
+
+        <div className="text-center mt-6">
+          <button
+            onClick={onRestart}
+            className="text-gray-600 hover:text-gray-800 font-medium py-2 px-6 rounded-lg hover:bg-gray-50 transition-all duration-200"
+          >
+            🔄 もう一度診断する
+          </button>
+        </div>
       </div>
     </div>
   );
