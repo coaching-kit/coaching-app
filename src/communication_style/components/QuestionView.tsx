@@ -6,6 +6,8 @@ interface QuestionViewProps {
   currentIndex: number;
   totalQuestions: number;
   onAnswer: (answer: number) => void;
+  selectedAnswer?: number;
+  onBack?: () => void;
 }
 
 export default function QuestionView({
@@ -47,23 +49,41 @@ export default function QuestionView({
         </h2>
 
         <div className="space-y-3">
-          {options.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => onAnswer(option.value)}
-              className="w-full p-4 text-left rounded-xl border-2 border-gray-200 hover:border-indigo-500 hover:bg-indigo-50 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <div className="flex items-center">
-                <div className="w-8 h-8 rounded-full border-2 border-gray-300 flex items-center justify-center mr-4 group-hover:border-indigo-500">
-                  <span className="text-sm font-semibold text-gray-600">
-                    {option.value}
-                  </span>
+          {options.map((option) => {
+            const isSelected = selectedAnswer === option.value;
+            return (
+              <button
+                key={option.value}
+                onClick={() => onAnswer(option.value)}
+                className={`w-full p-4 text-left rounded-xl border-2 transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] ${
+                  isSelected
+                    ? 'border-indigo-500 bg-indigo-50'
+                    : 'border-gray-200 hover:border-indigo-500 hover:bg-indigo-50'
+                }`}
+              >
+                <div className="flex items-center">
+                  <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center mr-4 ${isSelected ? 'border-indigo-500' : 'border-gray-300'}`}>
+                    <span className="text-sm font-semibold text-gray-600">
+                      {option.value}
+                    </span>
+                  </div>
+                  <span className="text-gray-700 font-medium">{option.label}</span>
                 </div>
-                <span className="text-gray-700 font-medium">{option.label}</span>
-              </div>
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
+
+        {onBack && currentIndex > 0 && (
+          <div className="mt-4 flex justify-start">
+            <button
+              onClick={onBack}
+              className="px-4 py-2 rounded-lg bg-white/20 text-white hover:bg-white/30 transition-all duration-150"
+            >
+              ◀ 前の質問へ
+            </button>
+          </div>
+        )}
       </div>
 
       <p className="text-center text-white/80 text-sm">

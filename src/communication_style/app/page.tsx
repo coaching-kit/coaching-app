@@ -141,6 +141,8 @@ export default function Home() {
             currentIndex={currentQuestionIndex}
             totalQuestions={shuffledQuestions.length}
             onAnswer={handleAnswer}
+            selectedAnswer={answers[shuffledQuestions[currentQuestionIndex].id]}
+            onBack={() => setCurrentQuestionIndex((i) => Math.max(0, i - 1))}
           />
         )}
 
