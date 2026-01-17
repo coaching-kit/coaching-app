@@ -15,6 +15,8 @@ export default function QuestionView({
   currentIndex,
   totalQuestions,
   onAnswer,
+  selectedAnswer,
+  onBack,
 }: QuestionViewProps) {
   const options = [
     { value: 1, label: '全く当てはまらない' },
@@ -78,7 +80,7 @@ export default function QuestionView({
           <div className="mt-4 flex justify-start">
             <button
               onClick={onBack}
-              className="px-4 py-2 rounded-lg bg-white/20 text-white hover:bg-white/30 transition-all duration-150"
+              className="px-4 py-2 rounded-lg bg-gray-100 text-gray-800 hover:bg-gray-200 transition-all duration-150 border border-gray-200"
             >
               ◀ 前の質問へ
             </button>
