@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# 環境変数
+.env
+
+# Google Drive 認証情報
+credentials/
+*.json
+!**/package.json
+!**/package-lock.json
+!**/tsconfig.json
+*.pickle
+!session_organizer/.streamlit/*.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Streamlit
+.streamlit/secrets.toml
+
+# macOS
+.DS_Store
+
+# その他
+*.log
