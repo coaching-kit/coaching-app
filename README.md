@@ -10,6 +10,12 @@
 
 **コード**: [src/vak_assessment_nextjs/](./src/vak_assessment_nextjs/)
 
+### [コミュニケーションスタイル診断](https://coaching-kit.github.io/coaching-app/communication/)
+**URL**: https://coaching-kit.github.io/coaching-app/communication/  
+ビジネスや人間関係での対人スタイルを4タイプで診断
+
+**コード**: [src/communication_style/](./src/communication_style/)
+
 ---
 
 ## 📁 プロジェクト一覧
@@ -19,6 +25,11 @@ VAK診断アプリ（Next.js版・本番デプロイ済み）
 
 **URL**: https://coaching-kit.github.io/coaching-app/vak/
 
+### [src/communication_style](./src/communication_style/)
+コミュニケーションスタイル診断（Next.js版・本番デプロイ済み）
+
+**URL**: https://coaching-kit.github.io/coaching-app/communication/
+
 ---
 
 ## 🚀 複数アプリのデプロイ構成
@@ -26,6 +37,7 @@ VAK診断アプリ（Next.js版・本番デプロイ済み）
 このリポジトリは1つのGitHub Pagesで複数のアプリをホストできます：
 
 - `/vak/` - VAK診断アプリ
+- `/communication/` - コミュニケーションスタイル診断
 - `/personality/` - 性格診断アプリ（今後追加予定）
 - `/motivation/` - モチベーション診断アプリ（今後追加予定）
 
