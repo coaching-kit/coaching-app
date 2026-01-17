@@ -13,6 +13,8 @@ interface ResultViewProps {
 
 export default function ResultView({ result, onRestart }: ResultViewProps) {
   const [mounted, setMounted] = useState(false);
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -21,9 +23,23 @@ export default function ResultView({ result, onRestart }: ResultViewProps) {
   const { scores, typeName, description, strengths, businessTips, relationshipTips, closingMessage } = result;
 
   const handleEmailSend = () => {
+    // 簡易バリデーション
+    const trimmed = email.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!trimmed) {
+      setEmailError('送信先メールアドレスを入力してください');
+      return;
+    }
+    if (!emailRegex.test(trimmed)) {
+      setEmailError('有効なメールアドレスを入力してください');
+      return;
+    }
+    setEmailError(null);
+
     const subject = encodeURIComponent('【診断結果】あなたのコミュニケーションスタイル');
     const body = encodeURIComponent(generateEmailBody(result));
-    window.location.href = `mailto:?subject=${subject}&body=${body}`;
+    // 宛先を指定してメールアプリを起動
+    window.location.href = `mailto:${encodeURIComponent(trimmed)}?subject=${subject}&body=${body}`;
   };
 
   const chartData = [
@@ -221,12 +237,23 @@ export default function ResultView({ result, onRestart }: ResultViewProps) {
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">
-        <button
-          onClick={handleEmailSend}
-          className="flex-1 bg-white text-indigo-600 px-6 py-4 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg border-2 border-indigo-600"
-        >
-          📧 結果をメールで送る
-        </button>
+        <div className="flex-1">
+          <label className="text-sm text-gray-600">送信先メールアドレス</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="example@example.com"
+            className="w-full mt-2 px-4 py-3 rounded-lg border border-gray-200"
+          />
+          {emailError && <p className="text-sm text-red-600 mt-2">{emailError}</p>}
+          <button
+            onClick={handleEmailSend}
+            className="w-full mt-4 bg-white text-indigo-600 px-6 py-3 rounded-xl font-semibold hover:bg-gray-50 transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg border-2 border-indigo-600"
+          >
+            📧 指定アドレスにメールで送る（メールアプリを開く）
+          </button>
+        </div>
         <button
           onClick={onRestart}
           className="flex-1 bg-white/20 text-white px-6 py-4 rounded-xl font-semibold hover:bg-white/30 transition-all duration-200 hover:scale-105 active:scale-95 backdrop-blur-sm"
