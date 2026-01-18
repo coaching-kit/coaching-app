@@ -42,12 +42,22 @@ jobs:
         run: npm run build
         working-directory: ./src/communication_style
       
+      - name: Install dependencies for Wine VAK
+        run: npm ci
+        working-directory: ./src/wine_vak
+      
+      - name: Build Wine VAK
+        run: npm run build
+        working-directory: ./src/wine_vak
+      
       - name: Create deployment structure
         run: |
           mkdir -p deploy/vak
           mkdir -p deploy/communication
+          mkdir -p deploy/winevak
           cp -r src/vak_assessment_nextjs/out/* deploy/vak/
           cp -r src/communication_style/out/* deploy/communication/
+          cp -r src/wine_vak/out/* deploy/winevak/
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
