@@ -21,13 +21,13 @@ export interface VAKTypeInfo {
 
 // 12問の質問（シャッフル済み）
 export const VAK_QUESTIONS: VAKQuestion[] = [
-  { id: 1, type: 'A', question: '会話を通じて相手のことを理解し、信頼関係を築くのが得意だ' },
+  { id: 1, type: 'A', question: '会話を通じて相手のことを理解し、信頼関係を築くことが多い' },
   { id: 2, type: 'V', question: '新しい情報や提案を受けるとき、資料やデータで見せてもらうと理解しやすい' },
   { id: 3, type: 'K', question: '実際に体験することで、最も深く理解し記憶に残る' },
   { id: 4, type: 'V', question: '人と会ったとき、相手の表情や雰囲気から多くの情報を読み取る' },
-  { id: 5, type: 'A', question: '人の話を聞いて、その背景や想いを汲み取ることができる' },
+  { id: 5, type: 'A', question: '人の話を聞いて、その背景や想いを汲み取ろうとする' },
   { id: 6, type: 'K', question: '直感や雰囲気を大切にして、判断することが多い' },
-  { id: 7, type: 'V', question: '場所や人の顔を視覚的に覚えるのが得意で、次に会ったときすぐに分かる' },
+  { id: 7, type: 'V', question: '場所や人の顔を視覚的に覚えることが多く、次に会ったときすぐに分かる' },
   { id: 8, type: 'A', question: '声のトーンや話し方から、相手の本音や感情を読み取れる' },
   { id: 9, type: 'K', question: '理論より実践、まず試してみることで学ぶのが好きだ' },
   { id: 10, type: 'V', question: 'プレゼンや説明を受けるとき、図やグラフがあると理解が早い' },
@@ -39,7 +39,7 @@ export const VAK_QUESTIONS: VAKQuestion[] = [
 export const TYPE_INFO: Record<'V' | 'A' | 'K', VAKTypeInfo> = {
   V: {
     title: '👀 見るタイプ（視覚型）',
-    description: '目から入る情報が得意で、見て理解するタイプです。',
+    description: '目から入る情報を重視し、見て理解しようとするタイプです。',
     strengths: [
       'データや資料、図解で理解しやすい',
       '相手の表情やボディランゲージを読み取る',
@@ -65,7 +65,7 @@ export const TYPE_INFO: Record<'V' | 'A' | 'K', VAKTypeInfo> = {
   },
   A: {
     title: '👂 聞くタイプ（聴覚型）',
-    description: '耳から入る情報が得意で、会話や説明を通じて理解するタイプです。',
+    description: '耳から入る情報を重視し、会話や説明を通じて理解しようとするタイプです。',
     strengths: [
       '話を聞いて理解するのが得意',
       '会話で信頼関係を築く',
@@ -91,7 +91,7 @@ export const TYPE_INFO: Record<'V' | 'A' | 'K', VAKTypeInfo> = {
   },
   K: {
     title: '✋ 体感タイプ（体感覚型）',
-    description: '体で感じて理解するのが得意で、体験や実践を通じて学ぶタイプです。',
+    description: '体で感じて理解しようとし、体験や実践を通じて学ぶタイプです。',
     strengths: [
       '実際に体験することで深く理解',
       '直感や雰囲気を大切にする',
