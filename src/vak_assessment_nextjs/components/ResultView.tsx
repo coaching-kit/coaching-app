@@ -1,11 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import dynamic from 'next/dynamic';
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer } from 'recharts';
 import { VAKScores, getTypeName } from '@/lib/vakData';
-
-// Plotlyを動的インポート（SSR無効化）
-const Plot = dynamic(() => import('react-plotly.js'), { ssr: false });
 
 interface ResultViewProps {
   scores: VAKScores;
@@ -17,6 +14,13 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+
+  // Recharts用のデータ変換
+  const chartData = [
+    { subject: '視覚型', score: scores.V, fullMark: 20 },
+    { subject: '聴覚型', score: scores.A, fullMark: 20 },
+    { subject: '体感覚型', score: scores.K, fullMark: 20 },
+  ];
 
   const handleEmailRegister = async () => {
     if (!name.trim() || !email.includes('@')) return;
@@ -43,47 +47,22 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
 
         {/* レーダーチャート */}
         <div className="bg-white rounded-lg shadow-xl p-6 mb-6">
-          <Plot
-            data={[
-              {
-                type: 'scatterpolar',
-                r: [scores.V, scores.A, scores.K],
-                theta: ['Visual<br>視覚型', 'Auditory<br>聴覚型', 'Kinesthetic<br>体感覚型'],
-                fill: 'toself',
-                line: { color: 'rgb(99, 110, 250)', width: 3 },
-                fillcolor: 'rgba(99, 110, 250, 0.3)',
-              },
-            ]}
-            layout={{
-              autosize: true,
-              polar: {
-                radialaxis: {
-                  visible: true,
-                  range: [0, 20],
-                  automargin: true,
-                  tickfont: { size: 11 },
-                },
-                angularaxis: {
-                  tickfont: { size: 12 },
-                  automargin: true,
-                },
-              },
-              showlegend: false,
-              height: 440,
-              margin: { t: 40, b: 12, l: 60, r: 60 },
-              title: {
-                text: '<b>スコア分布</b>',
-                font: { size: 25 },
-                x: 0.5,
-                xanchor: 'center',
-                y: 0.98,
-                yanchor: 'top',
-                pad: { t: 6, b: 0 },
-              },
-            }}
-            config={{ staticPlot: true, displayModeBar: false }}
-            style={{ width: '100%' }}
-          />
+          <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">スコア分布</h3>
+          <ResponsiveContainer width="100%" height={400}>
+            <RadarChart data={chartData}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="subject" />
+              <PolarRadiusAxis angle={90} domain={[0, 20]} />
+              <Radar
+                name="スコア"
+                dataKey="score"
+                stroke="#636ef6"
+                fill="#636ef6"
+                fillOpacity={0.3}
+                strokeWidth={3}
+              />
+            </RadarChart>
+          </ResponsiveContainer>
         </div>
 
         {/* スコア表示 */}
