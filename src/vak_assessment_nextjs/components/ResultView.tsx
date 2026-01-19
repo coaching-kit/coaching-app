@@ -33,13 +33,13 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
   const handleSend = () => {
     if (!name.trim() || !email.includes('@')) return;
     setStatus('loading');
-    // 擬似送信（1500ms）
+    // 擬似送信（1000ms）
     setTimeout(() => {
       const ok = true; // デモ用：常に成功
       if (ok) {
         setStatus('success');
-        // 成功からさらに待ってプレビューを表示（2000ms）
-        setTimeout(() => setShowEmailPreview(true), 2000);
+        // 成功からさらに待ってプレビューを表示（1000ms）
+        setTimeout(() => setShowEmailPreview(true), 1000);
       } else {
         setStatus('error');
       }
