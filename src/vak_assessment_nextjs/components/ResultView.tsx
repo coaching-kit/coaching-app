@@ -14,6 +14,7 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [showEmailPreview, setShowEmailPreview] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   // Recharts用のデータ変換
   const chartData = [
@@ -68,9 +69,20 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
     );
   };
 
-  const handleShowPreview = () => {
+  const handleSend = () => {
     if (!name.trim() || !email.includes('@')) return;
-    setShowEmailPreview(true);
+    setStatus('loading');
+    // 擬似送信（1500ms）
+    setTimeout(() => {
+      const ok = true; // デモ用：常に成功
+      if (ok) {
+        setStatus('success');
+        // 成功からさらに待ってプレビューを表示（3000ms）
+        setTimeout(() => setShowEmailPreview(true), 3000);
+      } else {
+        setStatus('error');
+      }
+    }, 1500);
   };
 
   // メールプレビュー表示時は画面上部へスクロール
@@ -91,6 +103,7 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-8 px-4">
         <div className="max-w-3xl mx-auto">
+          <p className="text-sm text-gray-500 mb-4">※こちらはテスト用のメール表示です。実際にはこの内容がメールで届きます。</p>
           <div className="text-center mb-6">
             <h1 className="text-3xl font-bold text-gray-800 mb-2">📧 メールプレビュー</h1>
             <p className="text-gray-600">このような内容でメールが配信されます</p>
@@ -211,33 +224,66 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-xl p-6 mb-6">
+          <div className="bg-white rounded-lg shadow-xl p-6 mb-6">
           <h3 className="text-lg font-bold text-gray-800 mb-2">📧 詳しい診断結果をメールで受け取る</h3>
           <p className="text-gray-600 mb-3">メールアドレスを登録すると、診断の詳細と活用案を自動配信します。</p>
           <div className="flex flex-col gap-3 items-center">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="お名前"
-              className="w-full max-w-md px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="example@mail.com"
-              className="w-full max-w-md px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <button
-              onClick={handleShowPreview}
-              disabled={!name.trim() || !email.includes('@')}
-              className="w-full max-w-md bg-primary text-white font-medium py-2.5 px-6 rounded-lg hover:bg-blue-600 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
-            >
-              診断結果をメールで受け取る
-            </button>
-            <p className="text-xs text-gray-500 mt-1">↑テスト画面が表示されます（メールは配信されません）</p>
-            {status === 'error' && <p className="text-sm text-red-600">送信に失敗しました。後でもう一度お試しください。</p>}
+            {status === 'idle' && (
+              <>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="お名前"
+                  className="w-full max-w-md px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="example@mail.com"
+                  className="w-full max-w-md px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <button
+                  onClick={handleSend}
+                  disabled={!name.trim() || !email.includes('@')}
+                  className="w-full max-w-md bg-primary text-white font-medium py-2.5 px-6 rounded-lg hover:bg-blue-600 transition-all duration-200 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  診断結果をメールで受け取る
+                </button>
+                <p className="text-xs text-gray-500 mt-1">↑テスト画面が表示されます（メールは配信されません）</p>
+              </>
+            )}
+
+            {status === 'loading' && (
+              <div className="flex flex-col items-center gap-3">
+                <div className="text-sm text-gray-700">送信中…</div>
+                <button className="w-full max-w-md bg-gray-400 text-white font-medium py-2.5 px-6 rounded-lg" disabled>
+                  送信中…
+                </button>
+              </div>
+            )}
+
+            {status === 'success' && !showEmailPreview && (
+              <div className="text-center">
+                <p className="text-lg font-semibold text-green-700">✅ 診断結果をメールでお送りしました</p>
+                <p className="text-gray-600">数分以内に届きますので、ご確認ください。</p>
+              </div>
+            )}
+
+            {status === 'error' && (
+              <div className="text-center">
+                <p className="text-sm text-red-600">送信に失敗しました。後でもう一度お試しください。</p>
+                <div className="mt-3">
+                  <button
+                    onClick={() => setStatus('idle')}
+                    className="bg-primary text-white font-medium py-2.5 px-6 rounded-lg hover:bg-blue-600"
+                  >
+                    再試行
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
