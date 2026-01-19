@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer } from 'recharts';
-import { VAKScores, getTypeName, TYPE_INFO, getTypeClosing } from '@/lib/vakData';
+import { VAKScores } from '@/lib/vakData';
+import ResultChart from './result/ResultChart';
+import ScoreCards from './result/ScoreCards';
+import TypeSummary from './result/TypeSummary';
 
 interface ResultViewProps {
   scores: VAKScores;
@@ -77,8 +80,8 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
       const ok = true; // デモ用：常に成功
       if (ok) {
         setStatus('success');
-        // 成功からさらに待ってプレビューを表示（3000ms）
-        setTimeout(() => setShowEmailPreview(true), 3000);
+        // 成功からさらに待ってプレビューを表示（2000ms）
+        setTimeout(() => setShowEmailPreview(true), 2000);
       } else {
         setStatus('error');
       }
@@ -113,21 +116,14 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
             {orderedTypes.map((type, index) => (
               <div key={type}>
                 {index === 0 ? (
-                  // あなたのタイプ（ヘッダー含む）
                   <div
                     id={`type-${type}`}
                     className="mb-8 p-6 rounded-lg border-2 bg-blue-50 border-blue-400 shadow-lg"
                   >
-                    <div className="mb-4 text-center">
-                      <span className="inline-block bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                        👉 あなたのタイプ
-                      </span>
-                    </div>
                     {renderWithLink(generateHeader(name) + generateTypeEmail(type))}
                   </div>
                 ) : (
-                  // その他のタイプ例
-                  <div key={type}>
+                  <div>
                     {index === 1 && (
                       <div className="my-8 text-center">
                         <div className="inline-block bg-gray-200 px-4 py-2 rounded-lg">
@@ -135,6 +131,7 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
                         </div>
                       </div>
                     )}
+
                     <div
                       id={`type-${type}`}
                       className="mb-8 p-6 rounded-lg border-2 bg-gray-50 border-gray-200"
@@ -174,55 +171,11 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
           <p className="text-gray-600">あなたの結果をお届けします</p>
         </div>
 
-        {/* レーダーチャート */}
-        <div className="bg-white rounded-lg shadow-xl p-6 mb-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">スコア分布</h3>
-          <ResponsiveContainer width="100%" height={400}>
-            <RadarChart data={chartData}>
-              <PolarGrid />
-              <PolarAngleAxis dataKey="subject" />
-              <PolarRadiusAxis angle={90} domain={[0, 20]} />
-              <Radar
-                name="スコア"
-                dataKey="score"
-                stroke="#636ef6"
-                fill="#636ef6"
-                fillOpacity={0.3}
-                strokeWidth={3}
-              />
-            </RadarChart>
-          </ResponsiveContainer>
-        </div>
+        <ResultChart scores={scores} />
 
-        {/* スコア表示 */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          {[
-            { type: 'V', label: '👀 見るタイプ', score: scores.V },
-            { type: 'A', label: '👂 聞くタイプ', score: scores.A },
-            { type: 'K', label: '✋ 体感タイプ', score: scores.K },
-          ].map(({ type, label, score }) => (
-            <div key={type} className="bg-white rounded-lg shadow-lg p-6">
-              <div className="text-center mb-3">
-                <div className="text-sm text-gray-600 mb-1">{label}</div>
-                <div className="text-3xl font-bold text-primary">{score}/20</div>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div
-                  className="bg-primary h-3 rounded-full transition-all duration-300"
-                  style={{ width: `${(score / 20) * 100}%` }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+        <ScoreCards scores={scores} />
 
-        {/* タイプ判定結果 */}
-        <div className="bg-white rounded-lg shadow-xl p-6 mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">🌟 あなたのコミュニケーションタイプ</h2>
-          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
-            <p className="text-xl font-semibold text-green-800">{getTypeName(dominantType)}</p>
-          </div>
-        </div>
+        <TypeSummary dominantType={dominantType} />
 
           <div className="bg-white rounded-lg shadow-xl p-6 mb-6">
           <h3 className="text-lg font-bold text-gray-800 mb-2">📧 詳しい診断結果をメールで受け取る</h3>
