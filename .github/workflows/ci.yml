@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test-vak:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: ./src/vak_assessment_nextjs/package-lock.json
+      
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./src/vak_assessment_nextjs
+      
+      - name: Run lint
+        run: npm run lint
+        working-directory: ./src/vak_assessment_nextjs
+      
+      - name: Run tests
+        run: npm test -- --ci --coverage --maxWorkers=2
+        working-directory: ./src/vak_assessment_nextjs
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./src/vak_assessment_nextjs/coverage/lcov.info
+          flags: vak-unittests
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
