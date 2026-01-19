@@ -15,8 +15,6 @@ export interface VAKTypeInfo {
   description: string;
   strengths: string[];
   businessTips: string[];
-  wineTips: string[];
-  relationshipTips: string[];
 }
 
 // 12問の質問（シャッフル済み）
@@ -51,16 +49,6 @@ export const TYPE_INFO: Record<'V' | 'A' | 'K', VAKTypeInfo> = {
       '商談では実物やサンプルを見せる',
       'ホワイトボードや図解で説明する',
       '身だしなみや会議室の雰囲気づくりを意識'
-    ],
-    wineTips: [
-      'ワインの色や輝きの違いを楽しむ',
-      'ラベルや産地の写真に注目',
-      'テーブルセッティングを楽しむ'
-    ],
-    relationshipTips: [
-      '資料やビジュアルを用意して説明',
-      '身振りや表情豊かに話す',
-      '清潔感のある身だしなみを心がける'
     ]
   },
   A: {
@@ -77,16 +65,6 @@ export const TYPE_INFO: Record<'V' | 'A' | 'K', VAKTypeInfo> = {
       '電話やオンライン会議を効果的に活用',
       'グループディスカッションに積極参加',
       '相手の話をよく聞き、質問する'
-    ],
-    wineTips: [
-      'ソムリエの説明に耳を傾ける',
-      'ワインの背景やストーリーを楽しむ',
-      '参加者との会話を楽しむ'
-    ],
-    relationshipTips: [
-      'じっくり話を聞く時間を作る',
-      '背景や理由を丁寧に説明',
-      'ストーリーを交えて伝える'
     ]
   },
   K: {
@@ -103,17 +81,6 @@ export const TYPE_INFO: Record<'V' | 'A' | 'K', VAKTypeInfo> = {
       'まず試してみる、体験する',
       'ロールプレイで理解を深める',
       '現場や実物を見て判断'
-    ],
-    wineTips: [
-      '実際に味わいながら学ぶ',
-      '香りをじっくり楽しむ',
-      '料理とのペアリングを試す'
-    ],
-    relationshipTips: [
-      '実際に体験できる機会を提供',
-      'デモやサンプルを用意',
-      '理論より実践を重視',
-      'リラックスできる雰囲気づくり'
     ]
   }
 };
