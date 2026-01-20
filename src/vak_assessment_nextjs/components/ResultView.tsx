@@ -38,12 +38,12 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
       const ok = true; // デモ用：常に成功
       if (ok) {
         setStatus('success');
-        // 成功からさらに待ってプレビューを表示（1000ms）
-        setTimeout(() => setShowEmailPreview(true), 1000);
+        // 成功からさらに待ってプレビューを表示（500ms）
+        setTimeout(() => setShowEmailPreview(true), 500);
       } else {
         setStatus('error');
       }
-    }, 1500);
+    }, 1000);
   };
 
   // メールプレビュー表示時は画面上部へスクロール
