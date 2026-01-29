@@ -19,7 +19,7 @@ export interface VAKTypeInfo {
 
 // 12問の質問（シャッフル済み）
 export const VAK_QUESTIONS: VAKQuestion[] = [
-  { id: 1, type: 'A', question: '会話を通じて相手のことを理解し、信頼関係を築くことが多い' },
+  { id: 1, type: 'A', question: '相手のことを知るとき、じっくり話を聞くことで理解を深めようとする' },
   { id: 2, type: 'V', question: '新しい情報や提案を受けるとき、資料やデータで見せてもらうと理解しやすい' },
   { id: 3, type: 'K', question: '実際に体験することで、最も深く理解し記憶に残る' },
   { id: 4, type: 'V', question: '人と会ったとき、相手の表情や雰囲気から多くの情報を読み取る' },

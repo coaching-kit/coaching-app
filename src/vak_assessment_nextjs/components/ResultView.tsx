@@ -83,8 +83,25 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
         <TypeSummary dominantType={dominantType} />
 
           <div className="bg-white rounded-lg shadow-xl p-6 mb-6">
-          <h3 className="text-lg font-bold text-gray-800 mb-2">📧 詳しい診断結果をメールで受け取る</h3>
-          <p className="text-gray-600 mb-3">メールアドレスを登録すると、診断の詳細と活用案を自動配信します。</p>
+          <h3 className="text-2xl font-bold text-gray-800 mb-4">✨ メールで、あなたの強みレポートをゲット！</h3>
+          
+          <div className="mb-4 space-y-2">
+            <p className="text-gray-700 flex items-center">
+              <span className="mr-2">📊</span> あなたのスコア
+            </p>
+            <p className="text-gray-700 flex items-center">
+              <span className="mr-2">💼</span> ビジネスでの活用法
+            </p>
+            <p className="text-gray-700 flex items-center">
+              <span className="mr-2">🤝</span> 人間関係での活用法
+            </p>
+          </div>
+          
+          <p className="text-gray-600 mb-4">
+            まずはメールを開いて、自分の強みを詳しく確認してみましょう。<br />
+            このレポートで、あなたの強みを活かすアイデアやヒントがすぐに手に入ります。
+          </p>
+          
           <div className="flex flex-col gap-3 items-center">
             <MailEntryForm name={name} email={email} setName={setName} setEmail={setEmail} status={status} onSend={handleSend} />
 

@@ -94,14 +94,17 @@ export default function QuestionView({
             <div>
               <span className="font-semibold">V - Visual（視覚型）</span>
               <p className="text-gray-600">見た目や資料から情報を得るのが得意</p>
+              <p className="text-xs text-gray-500 mt-1">例：道を尋ねる時、地図を書いてほしいタイプ</p>
             </div>
             <div>
               <span className="font-semibold">A - Auditory（聴覚型）</span>
               <p className="text-gray-600">会話や説明を通じて理解するのが得意</p>
+              <p className="text-xs text-gray-500 mt-1">例：「スーパーの角を右に」など言葉で理解できるタイプ</p>
             </div>
             <div>
               <span className="font-semibold">K - Kinesthetic（体感覚型）</span>
               <p className="text-gray-600">体験や実践を通じて理解するのが得意</p>
+              <p className="text-xs text-gray-500 mt-1">例：身振り手振りや実際について来てもらうと安心するタイプ</p>
             </div>
           </div>
         </div>
