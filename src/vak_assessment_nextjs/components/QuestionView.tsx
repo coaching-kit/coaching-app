@@ -1,4 +1,4 @@
-import { VAKQuestion } from '@/lib/vakData';
+import { VAKQuestion, TYPE_INFO } from '@/lib/vakData';
 
 interface QuestionViewProps {
   currentQuestion: number;
@@ -90,22 +90,21 @@ export default function QuestionView({
         {/* サイドバー情報 */}
         <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">📋 診断について</h3>
+          <p className="text-sm text-gray-700 leading-relaxed mb-6 pb-6 border-b border-gray-200">
+            人それぞれ、情報を受け取る際に得意な方法が異なります。
+            <br />
+            このテストを通じて、あなたのコミュニケーションタイプを診断し、
+            <br />
+            強みを活かした学習やコミュニケーション方法を見つけましょう。
+          </p>
           <div className="space-y-3 text-sm text-gray-700">
-            <div>
-              <span className="font-semibold">V - Visual（視覚型）</span>
-              <p className="text-gray-600">見た目や資料から情報を得るのが得意</p>
-              <p className="text-xs text-gray-500 mt-1">例：道を尋ねる時、地図を書いてほしいタイプ</p>
-            </div>
-            <div>
-              <span className="font-semibold">A - Auditory（聴覚型）</span>
-              <p className="text-gray-600">会話や説明を通じて理解するのが得意</p>
-              <p className="text-xs text-gray-500 mt-1">例：「スーパーの角を右に」など言葉で理解できるタイプ</p>
-            </div>
-            <div>
-              <span className="font-semibold">K - Kinesthetic（体感覚型）</span>
-              <p className="text-gray-600">体験や実践を通じて理解するのが得意</p>
-              <p className="text-xs text-gray-500 mt-1">例：身振り手振りや実際について来てもらうと安心するタイプ</p>
-            </div>
+            {(['V', 'A', 'K'] as const).map((type) => (
+              <div key={type}>
+                <span className="font-semibold">{TYPE_INFO[type].title}</span>
+                <p className="text-gray-600">{TYPE_INFO[type].description}</p>
+                <p className="text-xs text-gray-500 mt-1">例：{TYPE_INFO[type].example}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>

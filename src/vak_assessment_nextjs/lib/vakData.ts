@@ -13,6 +13,7 @@ export interface VAKScores {
 export interface VAKTypeInfo {
   title: string;
   description: string;
+  example: string;
   strengths: string[];
   businessTips: string[];
 }
@@ -40,6 +41,7 @@ export const TYPE_INFO: Record<'V' | 'A' | 'K', VAKTypeInfo> = {
   V: {
     title: '👀 見るタイプ（視覚型）',
     description: '目から入る情報を重視し、見て理解しようとするタイプです。',
+    example: '道を尋ねる時、地図を書いてほしいタイプ',
     strengths: [
       'データや資料、図解で理解しやすい',
       '相手の表情やボディランゲージを読み取る',
@@ -55,6 +57,7 @@ export const TYPE_INFO: Record<'V' | 'A' | 'K', VAKTypeInfo> = {
   },
   A: {
     title: '👂 聞くタイプ（聴覚型）',
+    example: '「スーパーの角を右に」など言葉で理解できるタイプ',
     description: '耳から入る情報を重視し、会話や説明を通じて理解しようとするタイプです。',
     strengths: [
       '話を聞いて理解するのが得意',
@@ -71,6 +74,7 @@ export const TYPE_INFO: Record<'V' | 'A' | 'K', VAKTypeInfo> = {
   },
   K: {
     title: '✋ 体感タイプ（体感覚型）',
+    example: '身振り手振りや実際について来てもらうと安心するタイプ',
     description: '体で感じて理解しようとし、体験や実践を通じて学ぶタイプです。',
     strengths: [
       '実際に体験することで深く理解',
