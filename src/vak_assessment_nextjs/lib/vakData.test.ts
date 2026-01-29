@@ -38,7 +38,7 @@ describe('vakData', () => {
     it('V型の質問にのみ高得点を付けた場合、Vが最も高くなる', () => {
       const answers: Record<number, number> = {};
       
-      // V型の質問ID: 2, 4, 7, 10
+      // V型の質問ID: 3, 6, 9, 11
       VAK_QUESTIONS.forEach(q => {
         answers[q.id] = q.type === 'V' ? 5 : 1;
       });
@@ -61,14 +61,14 @@ describe('vakData', () => {
     it('一部の回答のみでも動作する', () => {
       const answers = {
         1: 3, // A型
-        2: 4, // V型
+        2: 4, // K型
       };
       
       const scores = calculateScores(answers);
       
-      expect(scores.V).toBe(4);
+      expect(scores.V).toBe(0);
       expect(scores.A).toBe(3);
-      expect(scores.K).toBe(0);
+      expect(scores.K).toBe(4);
     });
   });
 
