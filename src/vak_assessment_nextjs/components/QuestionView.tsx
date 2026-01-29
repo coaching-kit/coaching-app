@@ -91,11 +91,11 @@ export default function QuestionView({
         <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">📋 診断について</h3>
           <p className="text-sm text-gray-700 leading-relaxed mb-6 pb-6 border-b border-gray-200">
-            人それぞれ、情報を受け取る際に得意な方法が異なります。
+            人それぞれ、情報を受け取る得意な方法が異なります。
             <br />
-            このテストを通じて、あなたのコミュニケーションタイプを診断し、
+            このテストで、あなたのコミュニケーションタイプを診断します。
             <br />
-            強みを活かした学習やコミュニケーション方法を見つけましょう。
+            自分の強みを活かした学習法やコミュニケーション方法を見つけましょう。
           </p>
           <div className="space-y-3 text-sm text-gray-700">
             {(['V', 'A', 'K'] as const).map((type) => (
