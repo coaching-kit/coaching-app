@@ -36,7 +36,7 @@ export default function MailPreviewView({ name, dominantType, scores, onClose, o
             <div key={type}>
               {index === 0 ? (
                 <div id={`type-${type}`} className="mb-8 p-6 rounded-lg border-2 bg-blue-50 border-blue-400 shadow-lg">
-                  <div className="text-sm text-gray-700 mb-2"><strong>件名：</strong>【診断結果】あなたのコミュニケーションタイプ</div>
+                  <div className="text-sm text-gray-700 mb-2"><strong>件名：</strong>【診断結果】あなたの強みを活かすコミュニケーションタイプ</div>
                   {renderWithLink(generateHeader(name, scores) + generateTypeEmail(type))}
                 </div>
               ) : (
@@ -50,7 +50,7 @@ export default function MailPreviewView({ name, dominantType, scores, onClose, o
                   )}
 
                   <div id={`type-${type}`} className="mb-8 p-6 rounded-lg border-2 bg-gray-50 border-gray-200">
-                    <div className="text-sm text-gray-700 mb-2"><strong>件名：</strong>【診断結果】あなたのコミュニケーションタイプ</div>
+                    <div className="text-sm text-gray-700 mb-2"><strong>件名：</strong>【診断結果】あなたの強みを活かすコミュニケーションタイプ</div>
                     {renderWithLink(generateHeader(name, scores) + generateTypeEmail(type))}
                   </div>
                 </div>
