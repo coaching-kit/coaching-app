@@ -58,6 +58,7 @@ jobs:
           cp -r src/vak_assessment_nextjs/out/* deploy/vak/
           cp -r src/communication_style/out/* deploy/communication/
           cp -r src/wine_vak/out/* deploy/winevak/
+          cp src/index.html deploy/
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
