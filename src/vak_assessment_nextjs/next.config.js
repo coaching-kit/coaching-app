@@ -3,6 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   // GitHub Pages用の静的エクスポート設定
   output: 'export',
+  // 末尾スラッシュ付きURLを生成（GitHub Pages対応）
+  trailingSlash: true,
   // 画像最適化を無効化（GitHub Pagesでは使えないため）
   images: {
     unoptimized: true,
