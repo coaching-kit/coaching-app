@@ -109,7 +109,6 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
               setName={setName}
               setEmail={setEmail}
               status={status}
-              onSend={handleSend}
               diagnosisResult={dominantType}
             />
 

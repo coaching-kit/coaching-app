@@ -4,19 +4,23 @@ import type { FormEvent } from 'react';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
+const getFree20FromSearch = (search: string): string => {
+  const params = new URLSearchParams(search);
+  return (params.get('free20') ?? '').trim();
+};
+
 interface Props {
   name: string;
   email: string;
   setName: (v: string) => void;
   setEmail: (v: string) => void;
   status: Status;
-  onSend: () => void;
   diagnosisResult: 'V' | 'A' | 'K' | 'balanced';
 }
 
-export default function MailEntryForm({ name, email, setName, setEmail, status, onSend, diagnosisResult }: Props) {
+export default function MailEntryForm({ name, email, setName, setEmail, status, diagnosisResult }: Props) {
   const free20Value = typeof window !== 'undefined'
-    ? (new URLSearchParams(window.location.search).get('free20') ?? '')
+    ? getFree20FromSearch(window.location.search)
     : '';
   const free21Value = diagnosisResult === 'balanced' ? 'b' : diagnosisResult.toLowerCase();
   const formAction = `https://pro-coach.net/p/r/IXjDgtEf?free20=${encodeURIComponent(free20Value)}&free21=${encodeURIComponent(free21Value)}`;
@@ -27,7 +31,7 @@ export default function MailEntryForm({ name, email, setName, setEmail, status, 
       return;
     }
 
-    const currentFree20 = new URLSearchParams(window.location.search).get('free20') ?? '';
+    const currentFree20 = getFree20FromSearch(window.location.search);
     const currentFree21 = diagnosisResult === 'balanced' ? 'b' : diagnosisResult.toLowerCase();
     const form = event.currentTarget;
 
