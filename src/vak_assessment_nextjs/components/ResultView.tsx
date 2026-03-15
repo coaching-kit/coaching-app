@@ -103,7 +103,15 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
           </p>
           
           <div className="flex flex-col gap-3 items-center">
-            <MailEntryForm name={name} email={email} setName={setName} setEmail={setEmail} status={status} onSend={handleSend} />
+            <MailEntryForm
+              name={name}
+              email={email}
+              setName={setName}
+              setEmail={setEmail}
+              status={status}
+              onSend={handleSend}
+              diagnosisResult={dominantType}
+            />
 
             {status === 'loading' && (
               <div className="flex flex-col items-center gap-3">
