@@ -19,8 +19,13 @@ export default function MailPreviewView({ name, dominantType, scores, onClose, o
     }, 100);
   }, []);
 
-  const allTypes: Array<'balanced' | 'V' | 'A' | 'K'> = ['balanced', 'V', 'A', 'K'];
-  const orderedTypes = [dominantType, ...allTypes.filter(t => t !== dominantType)];
+  const orderedTypes: Array<'V' | 'A' | 'K' | 'balanced'> = ['V', 'A', 'K', 'balanced'];
+  const typeLabel: Record<'balanced' | 'V' | 'A' | 'K', string> = {
+    balanced: 'バランス型',
+    V: 'Vタイプ（視覚型）',
+    A: 'Aタイプ（聴覚型）',
+    K: 'Kタイプ（体感覚型）',
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-8 px-4">
@@ -31,30 +36,39 @@ export default function MailPreviewView({ name, dominantType, scores, onClose, o
           <p className="text-gray-600">このような内容でメールが配信されます</p>
         </div>
 
-        <div className="bg-white rounded-lg shadow-xl p-8 mb-6">
-          {orderedTypes.map((type, index) => (
-            <div key={type}>
-              {index === 0 ? (
-                <div id={`type-${type}`} className="mb-8 p-6 rounded-lg border-2 bg-blue-50 border-blue-400 shadow-lg">
-                  <div className="text-sm text-gray-700 mb-2"><strong>件名：</strong>【診断結果】あなたの強みを活かすコミュニケーションタイプ</div>
-                  {renderWithLink(generateHeader(name, scores) + generateTypeEmail(type))}
-                </div>
-              ) : (
-                <div>
-                  {index === 1 && (
-                    <div className="my-8 text-center">
-                      <div className="inline-block bg-gray-200 px-4 py-2 rounded-lg">
-                        <p className="text-sm font-semibold text-gray-700">📋 参考：他のタイプのメール例</p>
-                      </div>
-                    </div>
-                  )}
+        <div className="bg-white rounded-lg shadow p-4 mb-6">
+          <p className="text-sm font-semibold text-gray-700 mb-3">目次（各タイプへジャンプ）</p>
+          <div className="flex flex-wrap gap-2">
+            {orderedTypes.map((type) => (
+              <a
+                key={`toc-${type}`}
+                href={`#type-${type}`}
+                className="text-sm px-3 py-1.5 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                {typeLabel[type]}
+              </a>
+            ))}
+          </div>
 
-                  <div id={`type-${type}`} className="mb-8 p-6 rounded-lg border-2 bg-gray-50 border-gray-200">
-                    <div className="text-sm text-gray-700 mb-2"><strong>件名：</strong>【診断結果】あなたの強みを活かすコミュニケーションタイプ</div>
-                    {renderWithLink(generateHeader(name, scores) + generateTypeEmail(type))}
-                  </div>
-                </div>
-              )}
+          <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
+            <p className="text-xs text-amber-800 font-medium mb-1">注釈（サンプル値）</p>
+            <p className="text-xs text-amber-900 leading-relaxed">
+              この画面は
+              <span className="mx-1 inline-block rounded bg-amber-200 px-1.5 py-0.5 font-semibold">名前: つぶ</span>
+              <span className="mx-1 inline-block rounded bg-amber-200 px-1.5 py-0.5 font-semibold">紹介者ID: 0030005</span>
+              の場合の例です。実運用時はここを案件に合わせて変更してください。
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-xl p-8 mb-6">
+          {orderedTypes.map((type) => (
+            <div key={type}>
+              <div id={`type-${type}`} className="mb-8 p-6 rounded-lg border-2 bg-gray-50 border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-800 mb-3">{typeLabel[type]}</h2>
+                <div className="text-sm text-gray-700 mb-2"><strong>件名：</strong>【診断結果】あなたの強みを活かすコミュニケーションタイプ</div>
+                {renderWithLink(generateHeader(name, scores) + generateTypeEmail(type))}
+              </div>
             </div>
           ))}
         </div>
