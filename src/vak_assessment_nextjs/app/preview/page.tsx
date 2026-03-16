@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from 'react';
+import { Suspense, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import MailPreviewView from '@/components/mail/MailPreviewView';
 import { VAKScores } from '@/lib/vakData';
@@ -19,7 +19,7 @@ const toDominantType = (value: string | null): 'V' | 'A' | 'K' | 'balanced' => {
   return 'balanced';
 };
 
-export default function PreviewPage() {
+function PreviewContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -36,5 +36,13 @@ export default function PreviewPage() {
       onClose={() => router.push('/')}
       onRestart={() => router.push('/')}
     />
+  );
+}
+
+export default function PreviewPage() {
+  return (
+    <Suspense fallback={null}>
+      <PreviewContent />
+    </Suspense>
   );
 }

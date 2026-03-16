@@ -33,12 +33,17 @@ export function generateTypeEmail(type: 'V' | 'A' | 'K' | 'balanced') {
 export function renderWithLink(text: string) {
   const parts = text.split(CTA_URL);
   return (
-    <div className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-gray-800">
+    <div className="whitespace-pre-wrap break-words font-sans text-sm leading-relaxed text-gray-800">
       {parts.map((part, i) => (
         <span key={i}>
           {part}
           {i !== parts.length - 1 && (
-            <a href={CTA_URL} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+            <a
+              href={CTA_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline break-all"
+            >
               {CTA_URL}
             </a>
           )}
