@@ -1,18 +1,16 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import { VAKScores } from '@/lib/vakData';
 import { generateHeader, generateTypeEmail, renderWithLink } from './mailTemplates';
 
 interface Props {
   name: string;
   dominantType: 'V' | 'A' | 'K' | 'balanced';
-  scores: VAKScores;
   onClose: () => void;
   onRestart: () => void;
 }
 
-export default function MailPreviewView({ name, dominantType, scores, onClose, onRestart }: Props) {
+export default function MailPreviewView({ name, dominantType, onClose, onRestart }: Props) {
   useEffect(() => {
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -57,6 +55,7 @@ export default function MailPreviewView({ name, dominantType, scores, onClose, o
               <span className="mx-1 inline-block rounded bg-amber-200 px-1.5 py-0.5 font-semibold">名前: つぶ</span>
               <span className="mx-1 inline-block rounded bg-amber-200 px-1.5 py-0.5 font-semibold">紹介者ID: 0030005</span>
               の場合の例です。実運用時はここを案件に合わせて変更してください。
+              また、前回方針により「あなたのスコア」はメール本文に含めていません。
             </p>
           </div>
         </div>
@@ -67,7 +66,7 @@ export default function MailPreviewView({ name, dominantType, scores, onClose, o
               <div id={`type-${type}`} className="mb-8 p-6 rounded-lg border-2 bg-gray-50 border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-800 mb-3">{typeLabel[type]}</h2>
                 <div className="text-sm text-gray-700 mb-2"><strong>件名：</strong>【診断結果】あなたの強みを活かすコミュニケーションタイプ</div>
-                {renderWithLink(generateHeader(name, scores) + generateTypeEmail(type))}
+                {renderWithLink(generateHeader(name) + generateTypeEmail(type))}
               </div>
             </div>
           ))}

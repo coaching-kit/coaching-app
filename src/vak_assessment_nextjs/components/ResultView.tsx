@@ -61,7 +61,6 @@ export default function ResultView({ scores, dominantType, onRestart }: ResultVi
       <MailPreviewView
         name={name}
         dominantType={dominantType}
-        scores={scores}
         onClose={() => setShowEmailPreview(false)}
         onRestart={onRestart}
       />

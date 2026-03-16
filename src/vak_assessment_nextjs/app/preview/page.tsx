@@ -3,13 +3,6 @@
 import { Suspense, useMemo } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import MailPreviewView from '@/components/mail/MailPreviewView';
-import { VAKScores } from '@/lib/vakData';
-
-const SAMPLE_SCORES: VAKScores = {
-  V: 14,
-  A: 12,
-  K: 10,
-};
 
 const toDominantType = (value: string | null): 'V' | 'A' | 'K' | 'balanced' => {
   const normalized = (value ?? '').toLowerCase();
@@ -32,7 +25,6 @@ function PreviewContent() {
     <MailPreviewView
       name="つぶ"
       dominantType={dominantType}
-      scores={SAMPLE_SCORES}
       onClose={() => router.push('/')}
       onRestart={() => router.push('/')}
     />

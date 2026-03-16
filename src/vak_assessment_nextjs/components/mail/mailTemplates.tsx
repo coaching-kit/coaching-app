@@ -1,13 +1,9 @@
 import React from 'react';
-import { VAKScores } from '@/lib/vakData';
 
 export const CTA_URL = 'https://pro-coach.net/p/r/8uCeXl3l?free20=0030005';
 
-export function generateHeader(userName: string, scores: VAKScores) {
-  const v = scores.V;
-  const a = scores.A;
-  const k = scores.K;
-  return `${userName}様\n\n🎉 診断完了！\nあなたの結果をお送りします。\n\n【あなたのスコア】\n👀 見るタイプ（視覚型）: ${v}/20点\n👂 聞くタイプ（聴覚型）: ${a}/20点\n✋ 体感タイプ（体感覚型）: ${k}/20点\n\n`;
+export function generateHeader(userName: string) {
+  return `${userName}様\n\n🎉 診断完了！\nあなたの結果をお送りします。\n\n`;
 }
 
 export function generateTypeEmail(type: 'V' | 'A' | 'K' | 'balanced') {
