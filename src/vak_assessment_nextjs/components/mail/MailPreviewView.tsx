@@ -5,12 +5,11 @@ import { generateHeader, generateTypeEmail, renderWithLink } from './mailTemplat
 
 interface Props {
   name: string;
-  dominantType: 'V' | 'A' | 'K' | 'balanced';
   onClose: () => void;
   onRestart: () => void;
 }
 
-export default function MailPreviewView({ name, dominantType, onClose, onRestart }: Props) {
+export default function MailPreviewView({ name, onClose, onRestart }: Props) {
   useEffect(() => {
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
