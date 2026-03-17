@@ -10,7 +10,8 @@ export default function ThanksPage() {
 
         <p className="text-gray-700 leading-relaxed mb-6 text-center">
           診断を受けて一歩踏み出したあなたの行動は、これからの成長につながります。<br />
-          ご入力いただいたメールアドレス宛に診断結果をお送りしました。届いたら、ぜひ次の一歩に活かしてみてください。
+          ご入力いただいたメールアドレス宛に診断結果をお送りしました。<br />
+          届いたら、ぜひ次の一歩に活かしてみてください。
         </p>
 
         <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6">
