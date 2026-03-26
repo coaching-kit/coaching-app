@@ -1,94 +1,47 @@
 # Coaching App
 
-コーチング関連のプロトタイプアプリケーション集
+VAKコミュニケーションタイプ診断アプリ（Next.js / Static Export）
 
-## 🌐 デプロイ済みアプリ
+## 🌐 公開URL
 
-### [VAK コミュニケーションタイプ診断](https://coaching-kit.github.io/coaching-app/vak/)
-**URL**: https://coaching-kit.github.io/coaching-app/vak/  
-**仕様書**: [doc/vak/仕様書.md](./doc/vak/仕様書.md)  
-ワイン会向けのVAKコミュニケーションタイプ診断アプリ（Next.js版）
+- GitHub Pages（確認用）: https://coaching-kit.github.io/coaching-app/
+- カスタムドメイン（本番）: https://vak.apps.global-leaders-academy.co.jp/
 
-**コード**: [src/vak_assessment_nextjs/](./src/vak_assessment_nextjs/)
+## 📁 構成
 
-### [コミュニケーションスタイル診断](https://coaching-kit.github.io/coaching-app/communication/)
-**URL**: https://coaching-kit.github.io/coaching-app/communication/  
-**仕様書**: [doc/communication/仕様書.md](./doc/communication/仕様書.md)  
-ビジネスや人間関係での対人スタイルを4タイプで診断
+- アプリ本体: [src/vak_assessment_nextjs](./src/vak_assessment_nextjs/)
+- 仕様書: [doc/vak/仕様書.md](./doc/vak/仕様書.md)
+- デプロイ設定: [.github/workflows/deploy.yml](./.github/workflows/deploy.yml)
 
-**コード**: [src/communication_style/](./src/communication_style/)
-
-### [ワイン × VAK診断](https://coaching-kit.github.io/coaching-app/winevak/)
-**URL**: https://coaching-kit.github.io/coaching-app/winevak/  
-**仕様書**: [doc/wine_vak/仕様書.md](./doc/wine_vak/仕様書.md)  
-ワインの楽しみ方を通じてコミュニケーションスタイルを発見する診断アプリ
-
-**コード**: [src/wine_vak/](./src/wine_vak/)
-
----
-
-## 📁 プロジェクト一覧
-
-### [src/vak_assessment_nextjs](./src/vak_assessment_nextjs/)
-VAK診断アプリ（Next.js版・本番デプロイ済み）
-
-**URL**: https://coaching-kit.github.io/coaching-app/vak/  
-**仕様書**: [doc/vak/仕様書.md](./doc/vak/仕様書.md)
-
-### [src/communication_style](./src/communication_style/)
-コミュニケーションスタイル診断（Next.js版・本番デプロイ済み）
-
-**URL**: https://coaching-kit.github.io/coaching-app/communication/  
-**仕様書**: [doc/communication/仕様書.md](./doc/communication/仕様書.md)
-
-### [src/wine_vak](./src/wine_vak/)
-ワイン × VAK診断（Next.js版・本番デプロイ済み）
-
-**URL**: https://coaching-kit.github.io/coaching-app/winevak/  
-**仕様書**: [doc/wine_vak/仕様書.md](./doc/wine_vak/仕様書.md)
-
----
-
-## 🚀 複数アプリのデプロイ構成
-
-このリポジトリは1つのGitHub Pagesで複数のアプリをホストできます：
-
-- `/vak/` - VAK診断アプリ
-- `/communication/` - コミュニケーションスタイル診断
-- `/winevak/` - ワイン × VAK診断
-- `/personality/` - 性格診断アプリ（今後追加予定）
-- `/motivation/` - モチベーション診断アプリ（今後追加予定）
-
-各アプリは`basePath`を設定することで、サブパスでアクセス可能になります。
-
----
-
-## セットアップ
-
-各プロジェクトのフォルダに移動して、それぞれの README を参照してください。
+## 🚀 ローカル起動
 
 ```bash
-# VAK診断（ポート3001）
 cd src/vak_assessment_nextjs
-npm install
-npm run dev
-
-# コミュニケーションスタイル診断（ポート3002）
-cd src/communication_style
-npm install
-npm run dev
-
-# ワイン × VAK診断（ポート3003）
-cd src/wine_vak
 npm install
 npm run dev
 ```
 
+- ローカルURL: http://localhost:3001
+
+## 🛠 デプロイ方針（GitHub Pages）
+
+このリポジトリは `actions/deploy-pages` で `src/vak_assessment_nextjs/out` をそのまま公開します。
+
+`deploy.yml` の環境変数で配信先を切り替えます。
+
+- `NEXT_PUBLIC_BASE_PATH: /coaching-app` + `ENABLE_CUSTOM_DOMAIN: 'false'`
+	- GitHub Pages確認用（`https://coaching-kit.github.io/coaching-app/`）
+- `NEXT_PUBLIC_BASE_PATH: ''` + `ENABLE_CUSTOM_DOMAIN: 'true'`
+	- カスタムドメイン本番用（`https://vak.apps.global-leaders-academy.co.jp/`）
+
+`ENABLE_CUSTOM_DOMAIN: 'true'` の場合、ワークフローが `out/CNAME` を生成します。
+
 ## ドキュメント
 
-- [診断ツール一覧](./doc/診断ツール一覧.md) - 全診断ツールの概要と仕様
-- [システム構成比較](./doc/システム構成比較.md) - Streamlit版 vs Next.js版の技術比較
+- [診断ツール一覧](./doc/診断ツール一覧.md)
+- [システム構成比較](./doc/システム構成比較.md)
+- [LINE公式アカウント概要](./doc/LINE公式アカウント概要.md)
 
 ## ライセンス
 
-MIT License - 詳細は[LICENSE](./LICENSE)を参照
+MIT License - 詳細は [LICENSE](./LICENSE) を参照
