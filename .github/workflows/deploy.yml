@@ -17,6 +17,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_BASE_PATH: /coaching-app
+      ENABLE_CUSTOM_DOMAIN: 'false'
+      CUSTOM_DOMAIN: vak.apps.global-leaders-academy.co.jp
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,7 +41,8 @@ jobs:
         working-directory: ./src/vak_assessment_nextjs
 
       - name: Add CNAME
-        run: echo "vak.apps.global-leaders-academy.co.jp" > src/vak_assessment_nextjs/out/CNAME
+        if: env.ENABLE_CUSTOM_DOMAIN == 'true'
+        run: echo "$CUSTOM_DOMAIN" > src/vak_assessment_nextjs/out/CNAME
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
