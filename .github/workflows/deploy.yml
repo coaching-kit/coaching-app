@@ -20,50 +20,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
-      - name: Install dependencies for VAK
+          cache: 'npm'
+          cache-dependency-path: ./src/vak_assessment_nextjs/package-lock.json
+
+      - name: Install dependencies
         run: npm ci
         working-directory: ./src/vak_assessment_nextjs
-      
-      - name: Build VAK
+
+      - name: Build
         run: npm run build
         working-directory: ./src/vak_assessment_nextjs
-      
-      - name: Install dependencies for Communication
-        run: npm ci
-        working-directory: ./src/communication_style
-      
-      - name: Build Communication
-        run: npm run build
-        working-directory: ./src/communication_style
-      
-      - name: Install dependencies for Wine VAK
-        run: npm ci
-        working-directory: ./src/wine_vak
-      
-      - name: Build Wine VAK
-        run: npm run build
-        working-directory: ./src/wine_vak
-      
-      - name: Create deployment structure
-        run: |
-          mkdir -p deploy/vak
-          mkdir -p deploy/communication
-          mkdir -p deploy/winevak
-          cp -r src/vak_assessment_nextjs/out/* deploy/vak/
-          cp -r src/communication_style/out/* deploy/communication/
-          cp -r src/wine_vak/out/* deploy/winevak/
-          cp src/index.html deploy/
-      
+
+      - name: Add CNAME
+        run: echo "vak.apps.global-leaders-academy.co.jp" > src/vak_assessment_nextjs/out/CNAME
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./deploy
+          path: ./src/vak_assessment_nextjs/out
 
   deploy:
     environment:
