@@ -5,6 +5,7 @@ describe('VakAssessmentV2', () => {
   beforeEach(() => {
     window.history.pushState(null, '', '/v2/?free20=0030005');
     window.scrollTo = jest.fn();
+    Element.prototype.scrollIntoView = jest.fn();
   });
 
   it('起動画面からfree20を保持したまま質問画面へ進む', async () => {

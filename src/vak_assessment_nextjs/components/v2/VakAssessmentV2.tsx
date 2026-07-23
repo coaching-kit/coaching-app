@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useMemo, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import {
   VAK_QUESTIONS,
   calculateScores,
@@ -142,6 +142,7 @@ export default function VakAssessmentV2({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [completed, setCompleted] = useState(false);
+  const questionTopRef = useRef<HTMLElement | null>(null);
 
   const currentQuestion = VAK_QUESTIONS[currentIndex];
   const progress = ((currentIndex + 1) / VAK_QUESTIONS.length) * 100;
@@ -151,7 +152,20 @@ export default function VakAssessmentV2({
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [completed, started, currentIndex]);
+  }, [completed, started]);
+
+  useEffect(() => {
+    if (!started || completed || currentIndex === 0) return;
+
+    const timeoutId = window.setTimeout(() => {
+      questionTopRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [completed, currentIndex, started]);
 
   useEffect(() => {
     setStartHref(buildV2Path('/v2/questions/', window.location.search));
@@ -316,7 +330,7 @@ export default function VakAssessmentV2({
           </div>
         </header>
 
-        <section className="mb-6 rounded-[1.5rem] bg-white p-5 shadow-lg ring-1 ring-black/5 md:p-6">
+        <section ref={questionTopRef} className="mb-6 scroll-mt-4 rounded-[1.5rem] bg-white p-5 shadow-lg ring-1 ring-black/5 md:p-6">
           <div className="mb-2 flex items-center justify-between text-sm">
             <span className="font-bold text-gray-700">
               質問 {currentIndex + 1} / {VAK_QUESTIONS.length}
