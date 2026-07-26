@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import {
+  TYPE_INFO,
   VAK_QUESTIONS,
   calculateScores,
   getDominantType,
@@ -9,6 +10,11 @@ import {
   getTypeName,
 } from '@/lib/vakData';
 import ResultChart from '@/components/result/ResultChart';
+import {
+  trackVakAssessmentStart,
+  trackVakReportSubmit,
+  trackVakResult,
+} from '@/lib/analytics';
 
 type VakResultType = 'V' | 'A' | 'K' | 'balanced';
 
@@ -71,6 +77,7 @@ function ReportSignupForm({ resultType }: { resultType: VakResultType }) {
     if (refererUrlInput) refererUrlInput.value = document.referrer;
 
     form.action = `https://pro-coach.net/p/r/IXjDgtEf?free20=${encodeURIComponent(currentFree20)}&free21=${encodeURIComponent(free21)}`;
+    trackVakReportSubmit(resultType, currentFree20);
   };
 
   return (
@@ -132,6 +139,24 @@ function HeroImage({ compact = false }: { compact?: boolean }) {
   );
 }
 
+function TypeGuide() {
+  return (
+    <section className="mb-6 rounded-[1.5rem] bg-white p-6 shadow-xl ring-1 ring-black/5">
+      <h2 className="mb-4 text-2xl font-black text-gray-900">📋 3つのタイプについて</h2>
+      <div className="grid gap-3 md:grid-cols-3">
+        {(['V', 'A', 'K'] as const).map((type) => (
+          <div key={type} className="rounded-2xl bg-gray-50 p-4">
+            <p className="font-bold text-gray-900">{TYPE_INFO[type].title}</p>
+            <p className="mt-2 text-sm leading-relaxed text-gray-700">
+              {TYPE_INFO[type].description}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export default function VakAssessmentV2({
   initialStarted = false,
 }: {
@@ -143,6 +168,7 @@ export default function VakAssessmentV2({
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [completed, setCompleted] = useState(false);
   const questionTopRef = useRef<HTMLElement | null>(null);
+  const trackedResultRef = useRef<string | null>(null);
 
   const currentQuestion = VAK_QUESTIONS[currentIndex];
   const progress = ((currentIndex + 1) / VAK_QUESTIONS.length) * 100;
@@ -171,6 +197,17 @@ export default function VakAssessmentV2({
     setStartHref(buildV2Path('/v2/questions/', window.location.search));
   }, []);
 
+  useEffect(() => {
+    if (!completed) return;
+
+    const currentFree20 = getFree20FromSearch(window.location.search);
+    const trackingKey = `${resultType}:${currentFree20}:${Object.keys(answers).length}`;
+    if (trackedResultRef.current === trackingKey) return;
+
+    trackedResultRef.current = trackingKey;
+    trackVakResult(resultType, currentFree20);
+  }, [answers, completed, resultType]);
+
   const handleStart = () => {
     setStarted(true);
 
@@ -178,6 +215,7 @@ export default function VakAssessmentV2({
       const nextPath = buildV2Path('/v2/questions/', window.location.search);
       window.history.pushState(null, '', nextPath);
       setStartHref(nextPath);
+      trackVakAssessmentStart(getFree20FromSearch(window.location.search));
     }
   };
 
@@ -207,6 +245,7 @@ export default function VakAssessmentV2({
     setAnswers({});
     setCurrentIndex(0);
     setCompleted(false);
+    trackedResultRef.current = null;
 
     if (typeof window !== 'undefined') {
       const startPath = buildV2Path('/v2/', window.location.search);
@@ -273,6 +312,8 @@ export default function VakAssessmentV2({
           </section>
 
           <ResultChart scores={scores} />
+
+          <TypeGuide />
 
           <section className="mb-6 rounded-[1.5rem] bg-white p-6 shadow-xl ring-1 ring-black/5">
             <h2 className="mb-4 text-2xl font-black text-gray-900">🌟 あなたのコミュニケーションタイプ</h2>

@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_BASE_PATH: ''
+      NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ vars.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
       ENABLE_CUSTOM_DOMAIN: 'true'
       CUSTOM_DOMAIN: vak.apps.global-leaders-academy.co.jp
     steps:
