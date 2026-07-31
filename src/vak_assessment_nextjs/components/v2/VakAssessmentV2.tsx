@@ -17,6 +17,7 @@ import {
 } from '@/lib/analytics';
 
 type VakResultType = 'V' | 'A' | 'K' | 'balanced';
+type AssessmentBasePath = '' | '/v2';
 
 const ANSWER_OPTIONS = [
   { score: 1, label: '全く当てはまらない' },
@@ -38,10 +39,19 @@ const getFree20FromSearch = (search: string): string => {
   return (params.get('free20') ?? '').trim();
 };
 
-const buildV2Path = (pathname: '/v2/' | '/v2/questions/', search: string): string => {
+const buildAssessmentPath = (
+  basePath: AssessmentBasePath,
+  section: 'start' | 'questions',
+  search: string,
+): string => {
   const params = new URLSearchParams(search);
   params.delete('start');
   const query = params.toString();
+  const pathname =
+    section === 'questions'
+      ? `${basePath}/questions/`
+      : `${basePath || ''}/`;
+
   return `${pathname}${query ? `?${query}` : ''}`;
 };
 
@@ -159,11 +169,13 @@ function TypeGuide() {
 
 export default function VakAssessmentV2({
   initialStarted = false,
+  basePath = '/v2',
 }: {
   initialStarted?: boolean;
+  basePath?: AssessmentBasePath;
 }) {
   const [started, setStarted] = useState(initialStarted);
-  const [startHref, setStartHref] = useState('/v2/questions/');
+  const [startHref, setStartHref] = useState(() => buildAssessmentPath(basePath, 'questions', ''));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [completed, setCompleted] = useState(false);
@@ -194,8 +206,8 @@ export default function VakAssessmentV2({
   }, [completed, currentIndex, started]);
 
   useEffect(() => {
-    setStartHref(buildV2Path('/v2/questions/', window.location.search));
-  }, []);
+    setStartHref(buildAssessmentPath(basePath, 'questions', window.location.search));
+  }, [basePath]);
 
   useEffect(() => {
     if (!completed) return;
@@ -212,7 +224,7 @@ export default function VakAssessmentV2({
     setStarted(true);
 
     if (typeof window !== 'undefined') {
-      const nextPath = buildV2Path('/v2/questions/', window.location.search);
+      const nextPath = buildAssessmentPath(basePath, 'questions', window.location.search);
       window.history.pushState(null, '', nextPath);
       setStartHref(nextPath);
       trackVakAssessmentStart(getFree20FromSearch(window.location.search));
@@ -248,8 +260,8 @@ export default function VakAssessmentV2({
     trackedResultRef.current = null;
 
     if (typeof window !== 'undefined') {
-      const startPath = buildV2Path('/v2/', window.location.search);
-      const nextStartHref = buildV2Path('/v2/questions/', window.location.search);
+      const startPath = buildAssessmentPath(basePath, 'start', window.location.search);
+      const nextStartHref = buildAssessmentPath(basePath, 'questions', window.location.search);
       window.history.pushState(null, '', startPath);
       setStartHref(nextStartHref);
     }

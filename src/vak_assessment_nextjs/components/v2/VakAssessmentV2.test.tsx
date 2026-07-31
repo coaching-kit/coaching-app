@@ -67,6 +67,18 @@ describe('VakAssessmentV2', () => {
     expect(window.location.search).toBe('?free20=0030005');
   });
 
+  it('本番ルートではfree20を保持したまま/questionsへ進む', async () => {
+    window.history.pushState(null, '', '/?free20=0030005');
+
+    render(<VakAssessmentV2 basePath="" />);
+
+    fireEvent.click(screen.getByRole('link', { name: '診断をはじめる' }));
+
+    expect(await screen.findByText(/質問 1 \/ 12/)).toBeTruthy();
+    expect(window.location.pathname).toBe('/questions/');
+    expect(window.location.search).toBe('?free20=0030005');
+  });
+
   it('回答すると次の質問へ進む', async () => {
     render(<VakAssessmentV2 initialStarted />);
 
