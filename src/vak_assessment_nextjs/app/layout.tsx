@@ -7,8 +7,33 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://vak.apps.global-leaders-academy.co.jp'),
   title: 'VAK コミュニケーションタイプ診断',
   description: 'あなたの強みを活かす！コミュニケーションタイプ診断',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: 'VAK コミュニケーションタイプ診断',
+    description: 'あなたの強みを活かす！コミュニケーションタイプ診断',
+    type: 'website',
+    url: '/',
+    siteName: 'VAK コミュニケーションタイプ診断',
+    images: [
+      {
+        url: '/vak-og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'VAKコミュニケーションタイプ診断のイメージ',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'VAK コミュニケーションタイプ診断',
+    description: 'あなたの強みを活かす！コミュニケーションタイプ診断',
+    images: ['/vak-og-image.png'],
+  },
 }
 
 export default function RootLayout({
