@@ -5,6 +5,7 @@ import { GA_MEASUREMENT_ID } from '@/lib/analytics'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
+const ogImagePath = '/vak-social-card.png'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://vak.apps.global-leaders-academy.co.jp'),
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     siteName: 'VAK コミュニケーションタイプ診断',
     images: [
       {
-        url: '/vak-og-image.png',
+        url: ogImagePath,
         width: 1200,
         height: 630,
         alt: 'VAKコミュニケーションタイプ診断のイメージ',
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'VAK コミュニケーションタイプ診断',
     description: 'あなたの強みを活かす！コミュニケーションタイプ診断',
-    images: ['/vak-og-image.png'],
+    images: [ogImagePath],
   },
 }
 
