@@ -45,6 +45,76 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
+      <Script id="vak-free20-bootstrap" strategy="beforeInteractive">
+        {`
+          (function () {
+            try {
+              var storageKey = 'vak.free20';
+              var getStoredFree20 = function () {
+                try {
+                  return (window.sessionStorage.getItem(storageKey) || '').trim();
+                } catch (error) {
+                  return '';
+                }
+              };
+              var storeFree20 = function (value) {
+                if (!value) return;
+                try {
+                  window.sessionStorage.setItem(storageKey, value);
+                } catch (error) {}
+              };
+              var params = new URLSearchParams(window.location.search);
+              var free20 = (params.get('free20') || '').trim();
+              if (free20) storeFree20(free20);
+              var effectiveFree20 = free20 || getStoredFree20();
+              if (!effectiveFree20) return;
+
+              var buildHref = function (rawHref) {
+                var url = new URL(rawHref, window.location.origin);
+                if (url.pathname !== '/questions/' && url.pathname !== '/v2/questions/') {
+                  return rawHref;
+                }
+                if (!url.searchParams.get('free20')) {
+                  url.searchParams.set('free20', effectiveFree20);
+                }
+                return url.pathname + url.search + url.hash;
+              };
+
+              var syncStartLinks = function () {
+                var links = document.querySelectorAll('a[href="/questions/"], a[href="/v2/questions/"]');
+                for (var index = 0; index < links.length; index += 1) {
+                  var currentHref = links[index].getAttribute('href');
+                  if (currentHref) links[index].setAttribute('href', buildHref(currentHref));
+                }
+              };
+
+              document.addEventListener(
+                'click',
+                function (event) {
+                  var target = event.target;
+                  if (!target || !target.closest) return;
+                  var link = target.closest('a[href="/questions/"], a[href="/v2/questions/"]');
+                  if (!link) return;
+                  var currentHref = link.getAttribute('href');
+                  if (!currentHref) return;
+                  var nextHref = buildHref(currentHref);
+                  if (nextHref !== currentHref) {
+                    event.preventDefault();
+                    window.location.href = nextHref;
+                  }
+                },
+                true
+              );
+
+              if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', syncStartLinks, { once: true });
+              } else {
+                syncStartLinks();
+              }
+            } catch (error) {}
+          })();
+        `}
+      </Script>
       <body className={inter.className}>{children}</body>
       {GA_MEASUREMENT_ID ? (
         <>

@@ -1,16 +1,20 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { VAK_QUESTIONS } from '@/lib/vakData';
 import VakAssessmentV2 from './VakAssessmentV2';
 
 describe('VakAssessmentV2', () => {
   beforeEach(() => {
+    window.sessionStorage.clear();
     window.history.pushState(null, '', '/v2/?free20=0030005');
     window.scrollTo = jest.fn();
     Element.prototype.scrollIntoView = jest.fn();
   });
 
-  const completeAssessment = (scoreForType: (type: 'V' | 'A' | 'K') => number) => {
-    render(<VakAssessmentV2 initialStarted />);
+  const completeAssessment = (
+    scoreForType: (type: 'V' | 'A' | 'K') => number,
+    component = <VakAssessmentV2 initialStarted />,
+  ) => {
+    render(component);
 
     VAK_QUESTIONS.forEach((question) => {
       const score = scoreForType(question.type);
@@ -79,6 +83,19 @@ describe('VakAssessmentV2', () => {
     expect(window.location.search).toBe('?free20=0030005');
   });
 
+  it('保存済みfree20を起動画面のリンクに復元できる', async () => {
+    window.sessionStorage.setItem('vak.free20', '0030005');
+    window.history.pushState(null, '', '/');
+
+    render(<VakAssessmentV2 basePath="" />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('link', { name: '診断をはじめる' }).getAttribute('href')).toBe(
+        '/questions/?free20=0030005',
+      );
+    });
+  });
+
   it('回答すると次の質問へ進む', async () => {
     render(<VakAssessmentV2 initialStarted />);
 
@@ -100,6 +117,16 @@ describe('VakAssessmentV2', () => {
 
   it('バランス型の診断結果をメールフォームに渡せる', async () => {
     completeAssessment(() => 3);
+
+    expect(await screen.findByText('診断結果をメールで受け取る')).toBeTruthy();
+    expectReportFormResult('b');
+  });
+
+  it('質問画面でURLからfree20が落ちても保存済みfree20をメールフォームに渡せる', async () => {
+    window.sessionStorage.setItem('vak.free20', '0030005');
+    window.history.pushState(null, '', '/questions/');
+
+    completeAssessment(() => 3, <VakAssessmentV2 initialStarted basePath="" />);
 
     expect(await screen.findByText('診断結果をメールで受け取る')).toBeTruthy();
     expectReportFormResult('b');

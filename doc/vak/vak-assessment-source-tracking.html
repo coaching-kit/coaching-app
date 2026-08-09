@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>VAK診断経由の申込を識別する free30=vak 追加案</title>
+  <title>VAK診断の紹介番号・診断タイプ引き継ぎ仕様</title>
   <style>
     :root {
       color-scheme: light;
@@ -314,37 +314,37 @@
     <header>
       <div class="badge-row">
         <span class="badge">説明資料</span>
-        <span class="badge add">今回追加すること</span>
+        <span class="badge add">現在の仕様</span>
         <span class="badge">VAK診断</span>
         <span class="badge">マイスピー連携</span>
       </div>
-      <h1>VAK診断経由の申込を識別するために、結果メールの申込リンクへ <code>free30=vak</code> を追加する</h1>
+      <h1>診断入口の <code>free20</code> を、結果メールの申込URLまで空にせず引き継ぐ</h1>
       <p class="lead">
-        この資料は、既存の <code>free20</code> 引き継ぎ仕様に加えて、今回新しく追加したい「VAK診断経由の申込だとわかる仕組み」を説明するためのものです。
+        この資料は、診断入口で受け取った紹介番号 <code>free20</code> と、診断結果タイプ <code>free21</code> をマイスピーへ正しく渡すための現在仕様を説明するものです。
       </p>
       <div class="callout">
         <p>
-          追加するのは、診断入口URLではなく、診断後に届く結果メール本文内の「無料セミナー詳細・お申し込み」リンクです。
-          そのリンクに <code>free30=vak</code> を付けます。
+          重要なのは、受診者に送るURLの <code>free20=0030005</code> を、診断完了後のメール登録フォームまで空にせず引き継ぐことです。
+          ここが空になると、結果メール本文の申込URLでも紹介番号が空欄になります。
         </p>
       </div>
     </header>
 
     <section aria-labelledby="change-summary">
-      <h2 id="change-summary">今回追加すること</h2>
+      <h2 id="change-summary">今回修正すること</h2>
       <div class="grid-2">
         <article class="card amber">
-          <h3>変更前</h3>
-          <pre>https://pro-coach.net/p/r/8uCeXl3l?free20=0030005</pre>
+          <h3>問題が起きていた状態</h3>
+          <pre>https://pro-coach.net/p/r/QoDWW0li?free20=</pre>
           <p>
-            申込リンクには施策IDの <code>free20</code> は付いているが、「VAK診断経由」という識別子は付いていない。
+            診断開始時の <code>free20</code> が途中で落ち、マイスピー側へ紹介番号が空のまま登録される。
           </p>
         </article>
         <article class="card green">
-          <h3>変更後</h3>
-          <pre>https://pro-coach.net/p/r/8uCeXl3l?free20=0030005&amp;free30=vak</pre>
+          <h3>修正後</h3>
+          <pre>https://pro-coach.net/p/r/QoDWW0li?free20=0030005</pre>
           <p>
-            <code>free30=vak</code> が追加されるため、無料セミナー申込データ側で「VAK診断経由」と判別できる。
+            診断入口で受け取った <code>free20</code> を保持し、結果メール登録時に復元して送信する。
           </p>
         </article>
       </div>
@@ -355,7 +355,7 @@
       <div class="diagram-wrap" aria-label="VAK診断から申込までのパラメータ引き継ぎ図">
         <svg viewBox="0 0 1120 430" role="img" aria-labelledby="diagramTitle diagramDesc">
           <title id="diagramTitle">VAK診断経由申込識別の流れ</title>
-          <desc id="diagramDesc">診断入口URLのfree20、診断結果のfree21、結果メール申込リンクのfree30がどこで使われるかを示す図。</desc>
+          <desc id="diagramDesc">診断入口URLのfree20と、診断結果のfree21がどこで使われるかを示す図。</desc>
           <defs>
             <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
               <path d="M2,2 L10,6 L2,10 Z" fill="#64748b"></path>
@@ -387,9 +387,9 @@
 
           <g filter="url(#shadow)">
             <rect x="678" y="70" width="220" height="125" rx="12" fill="#f3e8ff" stroke="#c4b5fd"></rect>
-            <text x="788" y="105" text-anchor="middle" font-size="18" font-weight="700" fill="#5b21b6">3. 結果メール</text>
-            <text x="788" y="135" text-anchor="middle" font-size="13" fill="#334155">本文内の申込リンク</text>
-            <text x="788" y="166" text-anchor="middle" font-size="13" font-family="Menlo, Consolas, monospace" fill="#047857">free30=vak を追加</text>
+            <text x="788" y="105" text-anchor="middle" font-size="18" font-weight="700" fill="#5b21b6">3. メール登録</text>
+            <text x="788" y="135" text-anchor="middle" font-size="13" fill="#334155">マイスピーへ送信</text>
+            <text x="788" y="166" text-anchor="middle" font-size="13" font-family="Menlo, Consolas, monospace" fill="#047857">free20 / free21</text>
           </g>
 
           <line x1="898" y1="132" x2="981" y2="132" stroke="#64748b" stroke-width="3" marker-end="url(#arrow)"></line>
@@ -397,24 +397,24 @@
           <g filter="url(#shadow)">
             <rect x="991" y="70" width="90" height="125" rx="12" fill="#ecfdf5" stroke="#86efac"></rect>
             <text x="1036" y="105" text-anchor="middle" font-size="18" font-weight="700" fill="#047857">4</text>
-            <text x="1036" y="135" text-anchor="middle" font-size="13" fill="#334155">申込</text>
-            <text x="1036" y="165" text-anchor="middle" font-size="12" fill="#047857">VAK判別</text>
+            <text x="1036" y="135" text-anchor="middle" font-size="13" fill="#334155">結果メール</text>
+            <text x="1036" y="165" text-anchor="middle" font-size="12" fill="#047857">紹介番号あり</text>
           </g>
 
           <path d="M162 200 C162 270, 475 270, 475 200" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="7 7" marker-end="url(#arrow)"></path>
           <text x="315" y="258" text-anchor="middle" font-size="13" fill="#1d4ed8">既存: free20 は診断登録側へ引き継ぐ</text>
 
           <path d="M788 205 C788 310, 1015 310, 1036 205" fill="none" stroke="#047857" stroke-width="3" marker-end="url(#arrow)"></path>
-          <text x="910" y="302" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">今回追加: 申込リンクに free30=vak</text>
+          <text x="910" y="302" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">修正後: 申込URLに free20 が入る</text>
 
           <rect x="72" y="336" width="976" height="42" rx="8" fill="#f8fafc" stroke="#d7deea"></rect>
           <text x="560" y="362" text-anchor="middle" font-size="14" font-family="Menlo, Consolas, monospace" fill="#111827">
-            https://pro-coach.net/p/r/8uCeXl3l?free20=0030005&amp;free30=vak
+            https://pro-coach.net/p/r/QoDWW0li?free20=0030005
           </text>
         </svg>
       </div>
       <p class="small">
-        図の緑部分が今回の追加対象です。既存の診断入口URLや、診断結果登録時の <code>free20</code> / <code>free21</code> の流れはそのままです。
+        診断入口URLで受け取った <code>free20</code> を保持し、診断結果登録時に <code>free21</code> と一緒に送信します。
       </p>
     </section>
 
@@ -433,17 +433,11 @@
             例: <code>v</code> / <code>a</code> / <code>k</code> / <code>b</code>。診断結果に応じて付く既存の分類値。
           </p>
         </article>
-        <article class="card green">
-          <h3><span class="tag add">free30</span> 経由元</h3>
-          <p>
-            今回追加する値。<code>free30=vak</code> を結果メールの申込リンクに付け、申込元がVAK診断だとわかるようにする。
-          </p>
-        </article>
       </div>
     </section>
 
     <section aria-labelledby="where">
-      <h2 id="where">追加する場所</h2>
+      <h2 id="where">送信する場所</h2>
       <table>
         <thead>
           <tr>
@@ -465,8 +459,8 @@
           </tr>
           <tr>
             <td>結果メール本文の申込リンク</td>
-            <td><code>free30=vak</code> を追加</td>
-            <td>今回の追加対象。メールを読んでセミナー申込した人が、VAK診断経由だと判別できる。</td>
+            <td><code>free20</code> が入った状態で表示</td>
+            <td>マイスピーに登録された紹介番号を、メール本文の申込URLへ反映する。</td>
           </tr>
         </tbody>
       </table>
@@ -475,24 +469,23 @@
     <section aria-labelledby="copy">
       <h2 id="copy">設定するURL</h2>
       <h3>結果メール本文に載せる申込リンク</h3>
-      <span class="url">https://pro-coach.net/p/r/8uCeXl3l?free20=0030005&amp;free30=vak</span>
+      <span class="url">https://pro-coach.net/p/r/QoDWW0li?free20=0030005</span>
 
       <h3 style="margin-top: 18px;">メール本文の表記例</h3>
       <pre>▼ 無料セミナーの詳細・お申し込みはこちら
-https://pro-coach.net/p/r/8uCeXl3l?free20=0030005&amp;free30=vak</pre>
+https://pro-coach.net/p/r/QoDWW0li?free20=0030005</pre>
     </section>
 
     <section aria-labelledby="check">
       <h2 id="check">確認ポイント</h2>
       <ul>
-        <li>結果メール本文の申込リンクに <code>free30=vak</code> が付いていること。</li>
         <li>既存の <code>free20=0030005</code> は消さずに残すこと。</li>
-        <li>URLにパラメータを追加するため、<code>?</code> ではなく <code>&amp;free30=vak</code> の形でつなぐこと。</li>
-        <li>申込側のマイスピー項目で <code>free30</code> が受け取れていること。</li>
+        <li>質問画面・結果画面に進んでも <code>free20</code> が復元されること。</li>
+        <li>結果メール本文の申込URLで <code>free20=</code> が空欄にならないこと。</li>
       </ul>
     </section>
 
-    <p class="footer-note">作成日: 2026-07-23 / 用途: VAK診断経由の申込識別追加案の説明資料</p>
+    <p class="footer-note">作成日: 2026-07-23 / 更新日: 2026-08-09 / 用途: VAK診断の紹介番号・診断タイプ引き継ぎ仕様の説明資料</p>
   </main>
 </body>
 </html>

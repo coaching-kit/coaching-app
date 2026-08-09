@@ -1,13 +1,13 @@
 import React from 'react';
 
-export const CTA_URL = 'https://pro-coach.net/p/r/8uCeXl3l?free20=0030005';
+export const CTA_URL = 'https://pro-coach.net/p/r/QoDWW0li?free20=0030005';
 
 export function generateHeader(userName: string) {
   return `${userName}様\n\n🎉 診断完了！\nあなたの結果をお送りします。\n\n`;
 }
 
 export function generateTypeEmail(type: 'V' | 'A' | 'K' | 'balanced') {
-  const CTA_URL = 'https://pro-coach.net/p/r/8uCeXl3l?free20=0030005';
+  const CTA_URL = 'https://pro-coach.net/p/r/QoDWW0li?free20=0030005';
   const commonFooter = `\n---\n\n✨ 次は、あなたの強みを実践で活かしていく番です！\nこの診断でわかったあなたの強みを活かして、人の力を引き出すスキルを体験してみませんか？\nそれがコーチングです。\n\n無料でコーチング入門編を活用できるこの機会を逃さないでください。\n\nまずは小さな一歩から、あなたの強みが誰かの力になる体験を。\n\n▼ 無料セミナーの詳細・お申し込みはこちら\n${CTA_URL}\n`;
 
   if (type === 'balanced') {

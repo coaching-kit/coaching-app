@@ -1,12 +1,62 @@
 "use client";
 
-import type { FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
+const FREE20_STORAGE_KEY = 'vak.free20';
 
 const getFree20FromSearch = (search: string): string => {
   const params = new URLSearchParams(search);
   return (params.get('free20') ?? '').trim();
+};
+
+const getStoredFree20 = (): string => {
+  if (typeof window === 'undefined') return '';
+
+  try {
+    return (window.sessionStorage.getItem(FREE20_STORAGE_KEY) ?? '').trim();
+  } catch {
+    return '';
+  }
+};
+
+const storeFree20 = (free20: string): void => {
+  if (typeof window === 'undefined' || !free20) return;
+
+  try {
+    window.sessionStorage.setItem(FREE20_STORAGE_KEY, free20);
+  } catch {
+    // sessionStorage が使えない環境ではURL上の値だけを使う
+  }
+};
+
+const getEffectiveFree20 = (search: string): string => {
+  const free20FromUrl = getFree20FromSearch(search);
+  if (free20FromUrl) {
+    storeFree20(free20FromUrl);
+    return free20FromUrl;
+  }
+
+  return getStoredFree20();
+};
+
+const ensureFree20InCurrentUrl = (): string => {
+  if (typeof window === 'undefined') return '';
+
+  const effectiveFree20 = getEffectiveFree20(window.location.search);
+  const currentFree20 = getFree20FromSearch(window.location.search);
+
+  if (effectiveFree20 && !currentFree20) {
+    const params = new URLSearchParams(window.location.search);
+    params.set('free20', effectiveFree20);
+    window.history.replaceState(
+      null,
+      '',
+      `${window.location.pathname}?${params.toString()}${window.location.hash}`,
+    );
+  }
+
+  return effectiveFree20;
 };
 
 interface Props {
@@ -19,9 +69,12 @@ interface Props {
 }
 
 export default function MailEntryForm({ name, email, setName, setEmail, status, diagnosisResult }: Props) {
-  const free20Value = typeof window !== 'undefined'
-    ? getFree20FromSearch(window.location.search)
-    : '';
+  const [free20Value, setFree20Value] = useState('');
+
+  useEffect(() => {
+    setFree20Value(ensureFree20InCurrentUrl());
+  }, []);
+
   const free21Value = diagnosisResult === 'balanced' ? 'b' : diagnosisResult.toLowerCase();
   const formAction = `https://pro-coach.net/p/r/IXjDgtEf?free20=${encodeURIComponent(free20Value)}&free21=${encodeURIComponent(free21Value)}`;
 
@@ -31,7 +84,7 @@ export default function MailEntryForm({ name, email, setName, setEmail, status, 
       return;
     }
 
-    const currentFree20 = getFree20FromSearch(window.location.search);
+    const currentFree20 = ensureFree20InCurrentUrl();
     const currentFree21 = diagnosisResult === 'balanced' ? 'b' : diagnosisResult.toLowerCase();
     const form = event.currentTarget;
 

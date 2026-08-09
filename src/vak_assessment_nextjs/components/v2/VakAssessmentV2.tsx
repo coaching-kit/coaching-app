@@ -18,6 +18,7 @@ import {
 
 type VakResultType = 'V' | 'A' | 'K' | 'balanced';
 type AssessmentBasePath = '' | '/v2';
+const FREE20_STORAGE_KEY = 'vak.free20';
 
 const ANSWER_OPTIONS = [
   { score: 1, label: '全く当てはまらない' },
@@ -39,6 +40,59 @@ const getFree20FromSearch = (search: string): string => {
   return (params.get('free20') ?? '').trim();
 };
 
+const getStoredFree20 = (): string => {
+  if (typeof window === 'undefined') return '';
+
+  try {
+    return (window.sessionStorage.getItem(FREE20_STORAGE_KEY) ?? '').trim();
+  } catch {
+    return '';
+  }
+};
+
+const storeFree20 = (free20: string): void => {
+  if (typeof window === 'undefined' || !free20) return;
+
+  try {
+    window.sessionStorage.setItem(FREE20_STORAGE_KEY, free20);
+  } catch {
+    // sessionStorage が使えない環境ではURL上の値だけを使う
+  }
+};
+
+const getEffectiveFree20 = (search: string): string => {
+  const free20FromUrl = getFree20FromSearch(search);
+  if (free20FromUrl) {
+    storeFree20(free20FromUrl);
+    return free20FromUrl;
+  }
+
+  return getStoredFree20();
+};
+
+const appendFree20ToSearch = (search: string, free20: string): string => {
+  const params = new URLSearchParams(search);
+  if (free20 && !params.get('free20')) {
+    params.set('free20', free20);
+  }
+  return params.toString();
+};
+
+const ensureFree20InCurrentUrl = (): string => {
+  if (typeof window === 'undefined') return '';
+
+  const effectiveFree20 = getEffectiveFree20(window.location.search);
+  const currentFree20 = getFree20FromSearch(window.location.search);
+
+  if (effectiveFree20 && !currentFree20) {
+    const query = appendFree20ToSearch(window.location.search, effectiveFree20);
+    const nextUrl = `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`;
+    window.history.replaceState(null, '', nextUrl);
+  }
+
+  return effectiveFree20;
+};
+
 const buildAssessmentPath = (
   basePath: AssessmentBasePath,
   section: 'start' | 'questions',
@@ -46,6 +100,10 @@ const buildAssessmentPath = (
 ): string => {
   const params = new URLSearchParams(search);
   params.delete('start');
+  const effectiveFree20 = getEffectiveFree20(search);
+  if (effectiveFree20 && !params.get('free20')) {
+    params.set('free20', effectiveFree20);
+  }
   const query = params.toString();
   const pathname =
     section === 'questions'
@@ -61,7 +119,7 @@ function ReportSignupForm({ resultType }: { resultType: VakResultType }) {
   const [free20, setFree20] = useState('');
 
   useEffect(() => {
-    setFree20(getFree20FromSearch(window.location.search));
+    setFree20(ensureFree20InCurrentUrl());
   }, []);
 
   const free21 = RESULT_CODES[resultType];
@@ -74,7 +132,7 @@ function ReportSignupForm({ resultType }: { resultType: VakResultType }) {
       return;
     }
 
-    const currentFree20 = getFree20FromSearch(window.location.search);
+    const currentFree20 = ensureFree20InCurrentUrl();
     const form = event.currentTarget;
     const free20Input = form.querySelector('#V2Userfree20') as HTMLInputElement | null;
     const free21Input = form.querySelector('#V2Userfree21') as HTMLInputElement | null;
@@ -206,13 +264,14 @@ export default function VakAssessmentV2({
   }, [completed, currentIndex, started]);
 
   useEffect(() => {
+    ensureFree20InCurrentUrl();
     setStartHref(buildAssessmentPath(basePath, 'questions', window.location.search));
   }, [basePath]);
 
   useEffect(() => {
     if (!completed) return;
 
-    const currentFree20 = getFree20FromSearch(window.location.search);
+    const currentFree20 = ensureFree20InCurrentUrl();
     const trackingKey = `${resultType}:${currentFree20}:${Object.keys(answers).length}`;
     if (trackedResultRef.current === trackingKey) return;
 
@@ -227,7 +286,7 @@ export default function VakAssessmentV2({
       const nextPath = buildAssessmentPath(basePath, 'questions', window.location.search);
       window.history.pushState(null, '', nextPath);
       setStartHref(nextPath);
-      trackVakAssessmentStart(getFree20FromSearch(window.location.search));
+      trackVakAssessmentStart(ensureFree20InCurrentUrl());
     }
   };
 
