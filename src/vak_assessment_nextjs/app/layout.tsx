@@ -26,6 +26,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         alt: 'VAKコミュニケーションタイプ診断のイメージ',
+        type: 'image/png',
       },
     ],
   },
